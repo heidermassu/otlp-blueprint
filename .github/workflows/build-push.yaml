@@ -12,5 +12,4 @@ jobs:
 
       - name: Build and Push
         run: |
-          cd k8s
           make build-and-push-all
