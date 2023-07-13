@@ -1,4 +1,5 @@
 IMAGE_NAME := otlp-blueprint
+GITHUB_REPOM := heidermassu/otlp-blueprint
 
 build-all: build-backend build-frontend
 
@@ -11,14 +12,15 @@ build-frontend:
 build-and-push-all: build-all push-backend push-frontend
 
 push-backend:
-	docker login
-	docker tag $(IMAGE_NAME)-backend:latest heiderhengstmann/$(IMAGE_NAME)-backend:latest
-	docker push heiderhengstmann/$(IMAGE_NAME)-backend:latest
-	docker tag $(IMAGE_NAME)-backend:latest heiderhengstmann/$(IMAGE_NAME)-backend:$(shell date +'%Y%m%d%H%M%S')
-	docker push heiderhengstmann/$(IMAGE_NAME)-backend:$(shell date +'%Y%m%d%H%M%S')
+	docker login docker.pkg.github.com -u $(shell echo $$GITHUB_ACTOR) -p ${TOKEN}
+	docker tag $(IMAGE_NAME)-backend:latest docker.pkg.github.com/$(GITHUB_REPOM)/$(IMAGE_NAME)-backend:latest
+	docker push docker.pkg.github.com/$(GITHUB_REPOM)/$(IMAGE_NAME)-backend:latest
+	docker tag $(IMAGE_NAME)-backend:latest docker.pkg.github.com/$(GITHUB_REPOM)/$(IMAGE_NAME)-backend:$(shell date +'%Y%m%d%H%M%S')
+	docker push docker.pkg.github.com/$(GITHUB_REPOM)/$(IMAGE_NAME)-backend:$(shell date +'%Y%m%d%H%M%S')
 
 push-frontend:
-	docker tag $(IMAGE_NAME)-frontend:latest heiderhengstmann/$(IMAGE_NAME)-frontend:latest
-	docker push heiderhengstmann/$(IMAGE_NAME)-frontend:latest
-	docker tag $(IMAGE_NAME)-frontend:latest heiderhengstmann/$(IMAGE_NAME)-frontend:$(shell date +'%Y%m%d%H%M%S')
-	docker push heiderhengstmann/$(IMAGE_NAME)-frontend:$(shell date +'%Y%m%d%H%M%S')
+	docker login docker.pkg.github.com -u $(shell echo $$GITHUB_ACTOR) -p ${TOKEN}
+	docker tag $(IMAGE_NAME)-frontend:latest docker.pkg.github.com/$(GITHUB_REPOM)/$(IMAGE_NAME)-frontend:latest
+	docker push docker.pkg.github.com/$(GITHUB_REPOM)/$(IMAGE_NAME)-frontend:latest
+	docker tag $(IMAGE_NAME)-frontend:latest docker.pkg.github.com/$(GITHUB_REPOM)/$(IMAGE_NAME)-frontend:$(shell date +'%Y%m%d%H%M%S')
+	docker push docker.pkg.github.com/$(GITHUB_REPOM)/$(IMAGE_NAME)-frontend:$(shell date +'%Y%m%d%H%M%S')
