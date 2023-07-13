@@ -10,12 +10,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         
-      - name: Log in to the Container registry
-        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-        with:
-          registry: ${{ variable.REGISTRY }}
-          username: ${{ github.actor }}
-          github-token: ${{ secrets.github_token }}
+      - name: Log in to registry
+        # This is where you will update the personal access token to GITHUB_TOKEN
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
