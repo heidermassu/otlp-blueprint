@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend
+  namespace: ${NAMESPACE_NAME}
 spec:
   replicas: 1
   selector:
@@ -14,7 +15,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: heiderhengstmann/otlp-blueprint:frontend_1.0
+          image: ghcr.io/llprojects/otlp-blueprint/otlp-blueprint-frontend:latest
           env:
             - name: APP_VERSION
               value: 1.0.0
@@ -33,10 +34,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: frontend
+  namespace: ${NAMESPACE_NAME}
 spec:
   selector:
     app: frontend
+  type: NodePort
   ports:
     - protocol: TCP
       port: 8080
-  type: LoadBalancer
