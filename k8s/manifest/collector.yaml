@@ -3,6 +3,7 @@ kind: OpenTelemetryCollector
 metadata:
   name: main
 spec:
+  replicas: 5
   config: |
     receivers:
       otlp:
@@ -11,6 +12,12 @@ spec:
             endpoint: 0.0.0.0:4317
           http:
             endpoint: 0.0.0.0:4318
+            cors:
+              allowed_origins:
+                - http://localhost:3000
+                - http://localhost:8080
+                - http://*.${NAMESPACE_NAME}.svc.cluster.local
+                - https://*.${NAMESPACE_NAME}.svc.cluster.local
     processors:
       memory_limiter:
         check_interval: 1s
@@ -25,11 +32,16 @@ spec:
         size_in_percentage: 40
     exporters:
       otlp:
-        endpoint: 'http://jaeger.test.svc.cluster.local:4317' #Jeager
+        endpoint: 'http://jaeger.${NAMESPACE_NAME}.svc.cluster.local:4317' #Jeager
         tls:
           insecure: true
     service:
       extensions: [health_check]
+      telemetry:
+        logs:
+          level: "INFO"
+          development: true
+          encoding: "json"
       pipelines:
         traces:
           receivers: [otlp]
